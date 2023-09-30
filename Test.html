@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page avec un Textbox et un Bouton au Milieu</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            /*background-image: url("roknar.jpg");*/
+        }
+        .container {
+            text-align: center;
+        }
+        .textbox {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border-color: #1955d6;
+            text-align: center;
+        }
+
+        .submit-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 10px;
+        }
+        .submit-button:hover {
+            transform: scale(1.1);
+        }
+
+        .LoadingScreen {
+            width: 250px;
+            height: 150px;
+            background-color: #fff; /* Couleur de fond blanche */
+            border: 2px solid #ccc; /* Bordure grise claire */
+            border-radius: 20px; /* Coins arrondis */
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Ombre légère */
+            position: relative;
+            display: flex; /* Utilisation de flexbox */
+            flex-direction: column; /* Aligner les éléments verticalement */
+            justify-content: flex-end; /* Centrer verticalement */
+            align-items: center; /* Centrer horizontalement */
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .Loading-text {
+            color: rgba(0, 0, 0, 0.7); /* Couleur du texte avec une transparence de 0.7 (noir partiellement transparent) */
+            font-size: 18px; /* Taille de la police */
+            opacity: 0.7; /* Transparence du texte */
+        }
+
+        .CheckId {
+            width: 300px;
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #72727288;
+            border-radius: 20px;
+            background-color: #f0f0f0;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Ombre légère */
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%; /* Pour rendre l'image circulaire */
+            object-fit: cover; /* Pour ajuster la taille de l'image sans la déformer */
+            margin: 10px auto;
+            display: block;
+        }
+
+        .question {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+        }
+
+        .button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+        }
+
+        .KeyContainer {
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+
+        #KeyText {
+            flex: 1;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        #copierButton {
+            padding: 10px;
+            background-color: #3498db2a;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        #copierButton img {
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            
+        }
+        .highlighted {
+            font-size: 1.5vw;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1;
+            color: #1f7be4;
+            
+
+        }
+       
+        .InfoContainer {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            padding: 20px;
+            border: 2px solid #005b8579;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .profileimageV2 {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%; 
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .informationPlayer {
+            margin: auto ;
+        }
+
+        .ResetTime  {
+            padding-left: 10px;
+            font-size: 1.75vw;
+            text-align: center;
+        }
+
+        .form__group {
+            position: relative;
+            padding: 15px 100px 0;
+            margin-top: 10px;
+            width: 70%;
+        }
+
+        .form__field {
+            font-family: inherit;
+            width: 100%;
+            border: 0;
+            border-bottom: 2px solid gray;
+            outline: 0;
+            font-size: 1rem;
+            color: rgb(182, 0, 0);
+            padding: 7px 0;
+            background: transparent;
+             transition: border-color 0.2s;
+
+             &::placeholder {
+                color: transparent;
+            }
+
+             &:placeholder-shown ~ .form__label {
+                font-size: 1.3rem;
+                cursor: text;
+                top: 20px;
+            }
+        }
+
+        .form__label {
+            position: absolute;
+            top: 0;
+            display: block;
+            transition: 0.2s;
+            font-size: 1.2rem;
+            color: gray;
+        }
+
+        .form__field:focus {
+           
+            ~ .form__label {
+                position: absolute;
+                top: 0;
+                display: block;
+                transition: 0.2s;
+                font-size: 1rem;
+                color: #11998e;
+                font-weight:700;    
+             }
+            
+            border-color: #11998e;
+            padding-bottom: 6px;  
+            font-weight: 700;
+            border-width: 3px;
+            border-image-slice: 1;
+        }
+/* reset input */
+.form__field{
+  &:required,&:invalid { box-shadow:none; }
+}
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <div class="InfoContainer">
+        <img class="profileimageV2" src="Rbx.png" alt="Photo de profil">
+        
+        <div class="informationPlayer">
+            <div class="KeyContainer">
+                <p id="IDText"><span class="highlighted">ID :</span> 150870556255 (Balistaguai)</p>
+            </div>
+            
+            <div class="KeyContainer">
+                <p id="KeyText"><span class="highlighted">Key :</span> gdlkfgsdf1sd554152ds15ffd5454d54f021d1s</p>
+                <button id="copierButton"><img src="ClipBoard.png" alt="Presse-papiers"> </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ResetTime">
+        <p class="Timer">Time before reset : 23h 53min 10s</p>
+    </div>
+
+    <div class="CheckId">
+        <img class="profile-image" src="Rbx.png" alt="Photo de profil">
+        <div class="question">Is that you?</div>
+        <div class="buttons">
+            <button class="button">Yes</button>
+            <button class="button">No</button>
+        </div>
+    </div>
+
+    <div class="LoadingScreen">
+        <div class="loading-spinner"></div>
+        <p class="Loading-text">Loading...</p>
+    </div>
+
+    <div class="container">
+        <h1>Champ de Texte au Milieu de la Page coucou mireille</h1>
+        <div class="form__group field">
+            <input type="input" class="form__field" placeholder="Name" name="name" id='name' required />
+            <label for="name" class="form__label">Roblox Id</label>
+          </div>
+        
+        <br>
+        <button class="submit-button" id="submitButton">Submit</button>
+    </div>
+
+    <script>
+        //<img class="PlayerImage" src="Rbx.png" alt="aaaa">
+        document.getElementsByClassName("LoadingScreen")[0].style.display = "none";
+        document.getElementsByClassName("CheckId")[0].style.display = "none";
+        document.getElementsByClassName("InfoContainer")[0].style.display = "none";
+        document.getElementsByClassName("ResetTime")[0].style.display = "none";
+        
+        // Détecter le clic sur le bouton
+
+        document.querySelectorAll(".buttons > *").forEach(function(element) {
+            element.addEventListener("click", function() {
+                if (element.textContent == "Yes") {
+                    document.getElementsByClassName("InfoContainer")[0].style.display = "";
+                    document.getElementsByClassName("ResetTime")[0].style.display = "";
+                } else {
+                    document.querySelectorAll(".container > *").forEach(function(element2) {
+                        element2.style.display = "";
+                    });
+
+                }
+                document.getElementsByClassName("CheckId")[0].style.display = "none";
+            });
+            
+        });
+
+        document.getElementById("submitButton").addEventListener("click", function() {
+            document.querySelectorAll(".container > *").forEach(function(element) {
+                element.style.display = "none";
+            });
+            document.getElementsByClassName("LoadingScreen")[0].style.display = "";
+            setTimeout(function() {
+                // Réafficher les éléments du milieu de la page
+                document.getElementsByClassName("LoadingScreen")[0].style.display = "none";
+                /*document.querySelectorAll(".container > *").forEach(function(element) {
+                    element.style.display = "";
+                });*/
+
+                document.getElementsByClassName("CheckId")[0].style.display = "";
+            }, 2000); // Temps de simulation de la tâche (3 secondes dans cet exemple)
+        });
+
+        document.getElementById("copierButton").addEventListener("click", function() {
+            var texteACopier = document.getElementById("KeyText").textContent;
+            var texteSansPrefixe = texteACopier.replace("Key : ", "");
+
+            var textareaTemporaire = document.createElement("textarea");
+            textareaTemporaire.value = texteSansPrefixe;
+            
+
+            document.body.appendChild(textareaTemporaire);
+
+            textareaTemporaire.select();
+            document.execCommand("copy");
+
+            document.body.removeChild(textareaTemporaire);
+
+            alert("Le texte a été copié dans le presse-papiers : " + texteSansPrefixe);
+        });
+
+        var dateFin = new Date();
+        dateFin.setHours(dateFin.getHours() + 24);
+        dateFin.setMinutes(dateFin.getMinutes() + 0);
+        dateFin.setSeconds(dateFin.getSeconds() + 0);
+
+        // Fonction pour mettre à jour l'horloge
+        function mettreAJourTimer() {
+            var maintenant = new Date().getTime();
+            var tempsRestant = dateFin - maintenant;
+
+            var heures = Math.floor((tempsRestant % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((tempsRestant % (1000 * 60 * 60)) / (1000 * 60));
+            var secondes = Math.floor((tempsRestant % (1000 * 60)) / 1000);
+
+            // Afficher le temps restant dans les éléments HTML correspondants
+            
+            document.getElementsByClassName("Timer")[0].textContent = "Time before reset : " + (heures < 10 ? "0" : "") + heures+"h " + (minutes < 10 ? "0" : "") + minutes+" min " + (secondes < 10 ? "0" : "") + secondes + "s"
+            
+            // Si le compte à rebours est terminé, afficher un message
+            if (tempsRestant <= 0) {
+                clearInterval(timerInterval);
+                document.getElementsByClassName("Timer")[0].textContent ="Time to reset !!";
+            }
+        }
+
+        mettreAJourTimer()
+        var timerInterval = setInterval(mettreAJourTimer, 1000);
+
+        const apiKey = 'vdMTCrP2BUGeVtpCtgW7kiVqj+MJB9mguBBJLRon93aqB1bF';
+        const userId = '4733372352';
+        const apiUrl = `https://users.roblox.com/v1/users/${userId}`;
+
+        /*         fetch(apiUrl, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${apiKey}`
+  }
+})
+.then(response => response.json())
+.then(userData => {
+  console.log(userData);
+})
+.catch(error => {
+  console.error('Erreur lors de la requête :', error);
+});
+*/
+// <input type="text" class="textbox" placeholder="Enter Id roblox here">
+        // api key : vdMTCrP2BUGeVtpCtgW7kt1A4upUk4GSym+6FKdIezWfIoJO
+    </script>
+</body>
+</html>
+
